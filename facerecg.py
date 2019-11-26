@@ -1,1 +1,0 @@
-print('This python file deals with the face recognition part of our project!')
