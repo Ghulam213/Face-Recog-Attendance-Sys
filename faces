@@ -1,0 +1,15 @@
+import os
+import time
+import face_recognition
+from face_recognition.face_recognition_cli import image_files_in_folder
+import pickle
+
+encodings = face_recognition.face_recognition_cli.scan_known_people('D:\Documents\FRAttendanceSystem\images/')
+
+with open('pickled_encodings.pkl', 'wb') as pickle_file:
+    pickle.dump(encodings, pickle_file)
+
+with open('pickled_encodings.pkl', 'rb') as pickle_file:
+    new_encodings = pickle.load(pickle_file)
+
+print(new_encodings==encodings)
