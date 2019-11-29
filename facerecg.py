@@ -39,14 +39,12 @@ webcam_image = face_recognition.load_image_file('D:\Documents\FRAttendanceSystem
 webcam_encodings = face_recognition.face_encodings(webcam_image)[0]
 
 
-abdzubair = face_recognition.load_image_file('D:\Documents\FRAttendanceSystem\images\Abdullah Zubair.jpg')
-encodingszubair = face_recognition.face_encodings(abdzubair)[0]
 
 with open('pickled_encodings2.pkl', 'rb') as pickle_file:
     new_encodings = pickle.load(pickle_file)
 
 for encoding in new_encodings:
-    result = face_recognition.compare_faces([encodingszubair], encoding)
+    result = face_recognition.compare_faces([webcam_image], encoding)
     if result[0]:
         print('Present!')
         break
