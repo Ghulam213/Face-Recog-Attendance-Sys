@@ -39,7 +39,7 @@ webcam_image = face_recognition.load_image_file('{}'.format(img_name))
 resized = cv2.resize(webcam_image, (1443,1987), interpolation = cv2.INTER_AREA)
 
 
-image = face_recognition.load_image_file('images\\'+name+'.jpg')
+image = face_recognition.load_image_file('D:\Documents\FRAttendanceSystem\images\\'+name+'.jpg')
 resized2 = cv2.resize(image, (1443,1987), interpolation = cv2.INTER_AREA)
 
 
