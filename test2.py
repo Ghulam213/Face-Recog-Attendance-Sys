@@ -11,7 +11,7 @@ cv2.namedWindow("test")
 
 img_counter = 0
 
-name = input("Enter Name:  ")
+name = 'Ghulam Muhammad'
 
 while True:
     ret, frame = cam.read()
@@ -44,6 +44,7 @@ resized2 = cv2.resize(image, (1443,1987), interpolation = cv2.INTER_AREA)
 
 
 result = face_recognition.compare_faces(resized, resized2)
+print(result)
 
 if result[0].all():
     print('Present!')
