@@ -1,11 +1,15 @@
-import face_recognition
-import pickle
-from face_recognition.face_recognition_cli import image_files_in_folder
+import os
+from twilio.rest import Client
+
+acc_sid = os.environ.get('ACC_SID')
+auth_token = os.environ.get('AUTH_TOKEN')
+my_number = os.environ.get('MY_PHONE_NUMBER')
+
+client = Client(acc_sid, auth_token)
 
 
-encodings = face_recognition.face_recognition_cli.scan_known_people('images\\')
-pickle_out = open('encodings.pkl', 'wb')
-pickle.dump(encodings, pickle_out)
-pickle_out.close()
-
-
+client.messages.create(
+    to=my_number,
+    from_=+18597554541,
+    body='Please report to the class or you will not be marked present.'
+)

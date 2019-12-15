@@ -10,7 +10,8 @@ from PIL import ImageTk, Image
 from tkinter import ttk
 from tkinter import messagebox
 import datetime
-import openpyxl
+import openpyxl import Client
+import twilio
 #from ttkthemes import ThemedTk
 
 
@@ -218,8 +219,8 @@ def main():
     # img_name = "{}.jpg".format('live')
     # cv2.imwrite(img_name, frame)
     # print("{} written!".format(img_name))
-    biden_encoding_unknown_image = face_recognition.face_encodings(frame)[0]
-    print('the cam:' ,biden_encoding_unknown_image)
+    encoding_unknown_image = face_recognition.face_encodings(frame)[0]
+    print('the cam:' ,encoding_unknown_image)
 
     cam.release()
     cv2.destroyAllWindows()
@@ -228,6 +229,30 @@ def main():
     lmain.imgtk = imgtk
     lmain.configure(image=imgtk)
 
+    #-------------------------if more than one faces shows the number of faces-----------------------------------------#
+
+    if len(encoding_unknown_image) > 0:
+        def strength(encodining_unknown_image):
+            print(f'{len(encoding_unknown_image)} students present in class.')
+
+    #-------------------------Twilio mobile messages-------------------------------------------------------------------#
+
+    acc_sid = os.environ.get('ACC_SID')
+    auth_token = os.environ.get('AUTH_TOKEN')
+    my_number = os.environ.get('MY_PHONE_NUMBER')
+
+    client = Client(acc_sid, auth_token)
+
+    def message(my_number):
+        client.messages.create(
+            to=my_number,
+            from_=+18597554541,
+            body='\nPlease report to the class or you will not be marked present.'
+        )
+
+#-----------------------------------------------------------------------------------#
+
+
     # taking out the particular image and find its encoding and comaring
 
     image_encoding = pickled_encodings[1][index_of_name_encodings]
@@ -235,7 +260,7 @@ def main():
 
     # comparing the results
     statusbar['text'] = 'Validating Data...'
-    results = face_recognition.compare_faces([image_encoding], biden_encoding_unknown_image, )
+    results = face_recognition.compare_faces([image_encoding], encoding_unknown_image, )
     # print(results)
 
     # now checking both and showing results
