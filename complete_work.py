@@ -41,7 +41,7 @@ middleFrame.place(x=680, y=110)
 
 picFrame = Frame(root, width='700', height='500')
 picFrame.place(x=40, y=110)
-imagetk = ImageTk.PhotoImage(file = 'label image.jpg')
+imagetk = ImageTk.PhotoImage(file = 'fr.jpg')
 lmain = ttk.Label(picFrame, image = imagetk)
 lmain.grid()
 
@@ -177,7 +177,7 @@ def main():
     # global name_for_encoding
     course = courseVar.get()
     if course == 'Choose Course':
-        messagebox.showinfo('ERROR:','Please Choose a Course!!')
+        messagebox.showinfo('ERROR','Please choose a course!')
         return
     student_name = name_display.get()
     statusbar['text'] = 'Checking Name...'
@@ -187,7 +187,7 @@ def main():
     if student_name in pickled_encodings[0]:
         index_of_name_encodings = pickled_encodings[0].index(student_name)
     else:
-        messagebox.showinfo('Name Error:', 'Name not found. Please check your name.')
+        messagebox.showinfo('Name Error', 'Name not found. Please check your name.')
 
     statusbar['text'] = 'Taking Live Image...'
     cam = cv2.VideoCapture(0)
@@ -235,7 +235,7 @@ def main():
     # now checking both and showing results
 
     if True in results and student_name in pickled_encodings[0]:
-        messagebox.showinfo('Face recognitions result', 'Your attendance have been marked successfully!')
+        messagebox.showinfo('Face recognitions result', 'Your attendance has been marked successfully!')
         statusbar['text'] = 'showing results'
         reset()
     else:
@@ -245,6 +245,7 @@ def main():
 
 #-------------------------Twilio mobile messages-------------------------------------------------------------------#
 
+acc_sid = os.environ.get('ACC_SID')
 auth_token = os.environ.get('AUTH_TOKEN')
 client = Client(acc_sid, auth_token)
 
@@ -263,7 +264,7 @@ def reset():
     student_name = ''
     statusbar['text'] = 'Enter Credentials'
     
-    imagetk = ImageTk.PhotoImage(file='label image.jpg')
+    imagetk = ImageTk.PhotoImage(file='fr.jpg')
     lmain.imagetk = imagetk
     lmain.configure(image=imagetk)
     
@@ -296,12 +297,12 @@ def summary():
                 present_list.append(name)
 
         info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-2)+' students are present' , font = ('Tw Cen MT',12)).place(x = 0 , y = 30)
-        prograssbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/5)*100)).place(x = 350 , y = 50)
+        progressbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/5)*100)).place(x = 350 , y = 50)
         for x in range(0,len(present_list)):
             lmain_x = Label(window , text = str(x+1)+'. '+present_list[x]).place(x = 0 , y = (60 + x*5))
         window.mainloop()
     else:
-        messagebox.showinfo('ERROR:','NO INFORMATION TO SHOW!!')
+        messagebox.showinfo('ERROR','There\'s nothing here yet.. :(')
 
 
 # ----------------------------------DEFINING BUTTONS AFTER THEIR FUNCTIONS---------------------------------------
