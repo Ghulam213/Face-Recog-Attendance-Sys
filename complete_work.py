@@ -16,7 +16,7 @@ from ttkthemes import ThemedTk
 
 
 
-# #----------------------------------------making pkl file of encodings-------------------------------------------
+#----------------------------------------making pkl file of encodings-------------------------------------------
 # encodings = face_recognition.face_recognition_cli.scan_known_people('images')
 #
 # pickle_out = open('encodings.pkl', 'wb')
@@ -272,7 +272,9 @@ def reset():
     courseVar.set('Choose Course')
     student_name = ''
     statusbar['text'] = 'Enter Credentials'
-    # lmain.grid_forget()
+    imgtk = ImageTk.PhotoImage(file='label image.jpg')
+    lmain = ttk.Label(picFrame, image=imgtk)
+    lmain.grid()
 
 # ---------------------------------------Exit function--------------------------------
 
