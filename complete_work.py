@@ -57,7 +57,7 @@ timerFrame.place(x=680, y=300)
 # -------------------------------------------in timer frame----------------------------------------------------
 
 time_lb = ttk.Label(timerFrame, text='Time Remaining: ',
-                    font=('Times New Roman', 15, 'bold'))
+                    font=('Tw Cen MT', 15, 'bold'))
 time_lb.place(x=60, y=30)
 w = Canvas(timerFrame, width=450, height=450)
 w.place(x=220, y=20)
@@ -74,13 +74,13 @@ def Run():
     w.delete('all')
     # Add new text
     w.create_text(
-        [100, 25], anchor=CENTER, text="%s:%s:%s" % (h, m, s), font=("Consolas", 25)
+        [100, 25], anchor=CENTER, text="%s:%s:%s" % (h, m, s), font=("Tw Cen MT", 25)
     )
 
     # s+=1
 
     if m == 0 and s == 0:
-        markBtn = Button(bottomFrame, text='Mark Attendence', state=DISABLED)
+        markBtn = Button(bottomFrame, text='Mark Attendance', state=DISABLED)
         markBtn.grid(row=0, column=1, padx=40, pady=20)
         return
     elif s == 0:
@@ -96,25 +96,25 @@ timerFrame.after(1, Run)
 # ---------------------------------------------- in top frame-------------------------------------------------
 
 titleName = ttk.Label(titleFrame, text='ATTENDANCE THROUGH FACIAL RECOGNITION',
-                      font=('Tw Cen MT', 20))
-titleName.place(x=180, y=20)
+                      font=('Tw Cen MT', 30))
+titleName.place(x=110, y=20)
 
 # ----------------------------------------- in middle frame---------------------------------------------------
 
 # -----------------------taking the user name---------------------------
 inputName = ttk.Label(middleFrame, text='Enter Name:',
-                      font=('Times New Roman', 13, 'bold'))
+                      font=('Tw Cen MT', 13, 'bold'))
 inputName.place(x=60, y=30)
 
-name_display = ttk.Entry(middleFrame, width=45, font=('arial', 11))
+name_display = ttk.Entry(middleFrame, width=45, font=('Tw Cen MT', 11))
 name_display.place(x=180, y=30)
 
 # making a drop down menu of courses
 courseVar = StringVar()
-# courseVar.set('Choose Course')
+courseVar.set('Choose Course')
 
 courseName = ttk.Label(middleFrame, text='Course:',
-                       font=('Times New Roman', 13, 'bold'))
+                       font=('Tw Cen MT', 13, 'bold'))
 courseName.place(x=60, y=70)
 
 course_list = ['Choose Course', 'Calculus', 'Physics', 'Fundamentals of Programming', 'English', 'Discrete Maths',
@@ -136,7 +136,7 @@ statusbar.config(width='1280')
 run = False
 def mark():
     global run
-    statusbar['text'] = 'Marking Attendence....'
+    statusbar['text'] = 'Marking Attendance....'
     course = courseVar.get()
     name = student_name
 
@@ -185,11 +185,10 @@ def main():
         index_of_name_encodings = pickled_encodings[0].index(student_name)
     else:
         messagebox.showinfo('Name Error:', 'Name not found. Please check your name.')
-        return
 
     statusbar['text'] = 'Taking Live Image...'
     cam = cv2.VideoCapture(0)
-    cv2.namedWindow("test")
+    cv2.namedWindow("Face Recognizer")
     start = time.time()
 
     img_counter = 0
@@ -197,7 +196,7 @@ def main():
     while int(time.time() - start) != 5:
         global frame
         ret, frame = cam.read()
-        cv2.imshow("test", frame)
+        cv2.imshow("Face Recognizer", frame)
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         img = Image.fromarray(cv2image)
         if not ret:
@@ -239,12 +238,12 @@ def main():
     # now checking both and showing results
 
     if True in results and student_name in pickled_encodings[0]:
-        messagebox.showinfo('Face recognitions result', 'Your attendance have been marked successfully!!')
+        messagebox.showinfo('Face recognitions result', 'Your attendance have been marked successfully!')
         statusbar['text'] = 'showing results'
         mark()
         reset()
     else:
-        messagebox.showinfo('Face recognitions result', 'Your Credentials do not match. Try again!!')
+        messagebox.showinfo('Face recognitions result', 'Your Credentials do not match. Try again!')
         reset()
 
 
@@ -295,12 +294,12 @@ def summary():
         window.geometry('400x400')
         present_list = []
 
-        title_name2 = Label(window , text = 'Attendence Summary' , font = ('Calibri',20,'bold')).place(x = 50 , y = 0)
+        title_name2 = Label(window , text = 'Attendance Summary' , font = ('Tw Cen MT',20,'bold')).place(x = 50 , y = 0)
         for i in range(2,sheet.max_row):
             if sheet.cell(row = i , column = req_column).value == 'P':
                 name = sheet.cell(row = i , column = 1).value
                 present_list.append(name)
-        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-2)+' students are present' , font = ('Times New Roman',12)).place(x = 0 , y = 30)
+        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-2)+' students are present' , font = ('Tw Cen MT',12)).place(x = 0 , y = 30)
         prograssbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/5)*100)).place(x = 350 , y = 50)
         for x in range(0,len(present_list)):
             lmain_x = Label(window , text = str(x+1)+'. '+present_list[x]).place(x = 0 , y = (60 + x*5))
@@ -313,7 +312,7 @@ def summary():
 
 
 # making buttons
-markBtn = ttk.Button(bottomFrame, text='Mark Attandence', command=lambda: main())
+markBtn = ttk.Button(bottomFrame, text='Mark Attendance', command=lambda: main())
 markBtn.grid(row=0, column=1, padx=40, pady=20)
 
 resetBtn = ttk.Button(bottomFrame, text='Reset', command=lambda: reset())
