@@ -16,8 +16,8 @@ from ttkthemes import ThemedTk
 
 
 
-# ----------------------------------------making pkl file of encodings-------------------------------------------
-# encodings = face_recognition.face_recognition_cli.scan_known_people('C:\\Users\\addbi\\Desktop\\facerecognitions\\')
+# #----------------------------------------making pkl file of encodings-------------------------------------------
+# encodings = face_recognition.face_recognition_cli.scan_known_people('images')
 #
 # pickle_out = open('encodings.pkl', 'wb')
 # pickle.dump(encodings, pickle_out)
