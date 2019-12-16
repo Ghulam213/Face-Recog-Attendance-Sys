@@ -41,7 +41,7 @@ middleFrame.place(x=680, y=110)
 
 picFrame = Frame(root, width='700', height='500')
 picFrame.place(x=40, y=110)
-imagetk = ImageTk.PhotoImage(file = 'fr.jpg')
+imagetk = ImageTk.PhotoImage(file = 'label image.jpg')
 lmain = ttk.Label(picFrame, image = imagetk)
 lmain.grid()
 
@@ -80,7 +80,7 @@ def Run():
     # s+=1
 
     if m == 0 and s == 0:
-        markBtn = Button(bottomFrame, text='Mark Attendance', state=DISABLED)
+        markBtn = Button(bottomFrame, text='Mark Attendence', state=DISABLED)
         markBtn.grid(row=0, column=1, padx=40, pady=20)
         return
     elif s == 0:
@@ -96,8 +96,8 @@ timerFrame.after(1, Run)
 # ---------------------------------------------- in top frame-------------------------------------------------
 
 titleName = ttk.Label(titleFrame, text='ATTENDANCE THROUGH FACIAL RECOGNITION',
-                      font=('Tw Cen MT', 30))
-titleName.place(x=110, y=20)
+                      font=('Tw Cen MT', 20))
+titleName.place(x=180, y=20)
 
 # ----------------------------------------- in middle frame---------------------------------------------------
 
@@ -111,7 +111,7 @@ name_display.place(x=180, y=30)
 
 # making a drop down menu of courses
 courseVar = StringVar()
-courseVar.set('Choose Course')
+# courseVar.set('Choose Course')
 
 courseName = ttk.Label(middleFrame, text='Course:',
                        font=('Tw Cen MT', 13, 'bold'))
@@ -136,7 +136,7 @@ statusbar.config(width='1280')
 run = False
 def mark():
     global run
-    statusbar['text'] = 'Marking Attendance....'
+    statusbar['text'] = 'Marking Attendence....'
     course = courseVar.get()
     name = student_name
 
@@ -177,7 +177,7 @@ def main():
     # global name_for_encoding
     course = courseVar.get()
     if course == 'Choose Course':
-        messagebox.showinfo('ERROR','Please choose a course!')
+        messagebox.showinfo('ERROR:','Please Choose a Course!!')
         return
     student_name = name_display.get()
     statusbar['text'] = 'Checking Name...'
@@ -187,17 +187,18 @@ def main():
     if student_name in pickled_encodings[0]:
         index_of_name_encodings = pickled_encodings[0].index(student_name)
     else:
-        messagebox.showinfo('Name Error', 'Name not found. Please check your name.')
+        messagebox.showinfo('Name Error:', 'Name not found. Please check your name.')
+        return
 
     statusbar['text'] = 'Taking Live Image...'
     cam = cv2.VideoCapture(0)
-    cv2.namedWindow("Face Recognizer")
+    cv2.namedWindow("test")
     start = time.time()
 
     while int(time.time() - start) != 5:
         global frame
         ret, frame = cam.read()
-        cv2.imshow("Face Recognizer", frame)
+        cv2.imshow("test", frame)
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         img = Image.fromarray(cv2image)
         if not ret:
@@ -235,17 +236,17 @@ def main():
     # now checking both and showing results
 
     if True in results and student_name in pickled_encodings[0]:
-        messagebox.showinfo('Face recognitions result', 'Your attendance has been marked successfully!')
+        mark()
+        messagebox.showinfo('Face recognitions result', 'Your attendance have been marked successfully!!')
         statusbar['text'] = 'showing results'
         reset()
     else:
-        messagebox.showinfo('Face recognitions result', 'Your Credentials do not match. Try again!')
+        messagebox.showinfo('Face recognitions result', 'Your Credentials do not match. Try again!!')
         reset()
 
 
 #-------------------------Twilio mobile messages-------------------------------------------------------------------#
 
-acc_sid = os.environ.get('ACC_SID')
 auth_token = os.environ.get('AUTH_TOKEN')
 client = Client(acc_sid, auth_token)
 
@@ -264,7 +265,7 @@ def reset():
     student_name = ''
     statusbar['text'] = 'Enter Credentials'
     
-    imagetk = ImageTk.PhotoImage(file='fr.jpg')
+    imagetk = ImageTk.PhotoImage(file='label image.jpg')
     lmain.imagetk = imagetk
     lmain.configure(image=imagetk)
     
@@ -290,26 +291,26 @@ def summary():
         window.geometry('400x400')
         present_list = []
 
-        title_name2 = Label(window , text = 'Attendance Summary' , font = ('Tw Cen MT',20,'bold')).place(x = 50 , y = 0)
+        title_name2 = Label(window , text = 'Attendence Summary' , font = ('Tw Cen MT',20,'bold')).place(x = 50 , y = 0)
         for i in range(2,sheet.max_row):
             if sheet.cell(row = i , column = req_column).value == 'P':
                 name = sheet.cell(row = i , column = 1).value
                 present_list.append(name)
-
-        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-2)+' students are present' , font = ('Tw Cen MT',12)).place(x = 0 , y = 30)
-        progressbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/5)*100)).place(x = 350 , y = 50)
+        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-1)+' students are present' , font = ('Tw Cen MT',12)).place(x = 0 , y = 30)
+        prograssbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/(sheet.max_row-1))*100)).place(x = 340 , y = 50)
+        percent_label = Label(window , text =str(len(present_list)/(sheet.max_row-1)*100)+ '% \n Attendance' ).place(x = 290 , y = 180)
         for x in range(0,len(present_list)):
-            lmain_x = Label(window , text = str(x+1)+'. '+present_list[x]).place(x = 0 , y = (60 + x*5))
+            lmain_x = Label(window , text = str(x+1)+'. '+present_list[x]).place(x = 0 , y = (60 + x*25))
         window.mainloop()
     else:
-        messagebox.showinfo('ERROR','There\'s nothing here yet.. :(')
+        messagebox.showinfo('ERROR:','NO INFORMATION TO SHOW!!')
 
 
 # ----------------------------------DEFINING BUTTONS AFTER THEIR FUNCTIONS---------------------------------------
 
 
 # making buttons
-markBtn = ttk.Button(bottomFrame, text='Mark Attendance', command=lambda: main())
+markBtn = ttk.Button(bottomFrame, text='Mark Attandence', command=lambda: main())
 markBtn.grid(row=0, column=1, padx=40, pady=20)
 
 resetBtn = ttk.Button(bottomFrame, text='Reset', command=lambda: reset())
