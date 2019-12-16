@@ -28,7 +28,7 @@ from ttkthemes import ThemedTk
 
 root = ThemedTk(theme='radiance')
 root.title('Attendance System')
-#root.iconbitmap('icon.ico')
+root.iconbitmap('icon.ico')
 root.geometry('1320x620')
 
 # defining frames
@@ -41,8 +41,8 @@ middleFrame.place(x=680, y=110)
 
 picFrame = Frame(root, width='700', height='500')
 picFrame.place(x=40, y=110)
-imgtk = ImageTk.PhotoImage(file = 'label image.jpg')
-lmain = ttk.Label(picFrame, image = imgtk)
+imagetk = ImageTk.PhotoImage(file = 'label image.jpg')
+lmain = ttk.Label(picFrame, image = imagetk)
 lmain.grid()
 
 bottomFrame = Frame(root, width='730', height='100')
@@ -146,8 +146,7 @@ def mark():
     wb = openpyxl.load_workbook('Attendence.xlsx')
     sheet = wb.get_sheet_by_name(course)  # in original program sheet1 will be replaced by
     # varible course already in gui framework.py
-    print(sheet.max_row + 1)
-
+    
     for i in range(1, sheet.max_row + 1):
         if sheet.cell(row=i, column=1).value == name:
             req_row = i
@@ -176,6 +175,10 @@ def main():
     # taking the user entered name from above gui
     global student_name
     # global name_for_encoding
+    course = courseVar.get()
+    if course == 'Choose Course':
+        messagebox.showinfo('ERROR:','Please Choose a Course!!')
+        return
     student_name = name_display.get()
     statusbar['text'] = 'Checking Name...'
 
@@ -192,8 +195,6 @@ def main():
     cv2.namedWindow("test")
     start = time.time()
 
-    img_counter = 0
-
     while int(time.time() - start) != 5:
         global frame
         ret, frame = cam.read()
@@ -203,10 +204,6 @@ def main():
         if not ret:
             break
         k = cv2.waitKey(1)
-    global img_name
-    # img_name = "{}.jpg".format('live')
-    # cv2.imwrite(img_name, frame)
-    # print("{} written!".format(img_name))
     encoding_unknown_image = face_recognition.face_encodings(frame)[0]
     #print('the cam:' ,encoding_unknown_image)
 
@@ -217,7 +214,7 @@ def main():
     lmain.imgtk = imgtk
     lmain.configure(image=imgtk)
 
-    #-------------------------if more than one faces shows the number of faces-----------------------------------------#
+#-------------------------if more than one faces shows the number of faces-----------------------------------------#
 
     # if len(encoding_unknown_image) > 0:
     #     def strength(encoding_unknown_image):
@@ -234,25 +231,23 @@ def main():
     # comparing the results
     statusbar['text'] = 'Validating Data...'
     results = face_recognition.compare_faces([image_encoding], encoding_unknown_image)
-    # print(results)
+    #print(results)
 
     # now checking both and showing results
 
     if True in results and student_name in pickled_encodings[0]:
+        mark()
         messagebox.showinfo('Face recognitions result', 'Your attendance have been marked successfully!!')
         statusbar['text'] = 'showing results'
-        mark()
         reset()
     else:
         messagebox.showinfo('Face recognitions result', 'Your Credentials do not match. Try again!!')
         reset()
 
 
-    #-------------------------Twilio mobile messages-------------------------------------------------------------------#
+#-------------------------Twilio mobile messages-------------------------------------------------------------------#
 
-acc_sid = os.environ.get('ACC_SID')
 auth_token = os.environ.get('AUTH_TOKEN')
-
 client = Client(acc_sid, auth_token)
 
 def message():
@@ -269,10 +264,11 @@ def reset():
     courseVar.set('Choose Course')
     student_name = ''
     statusbar['text'] = 'Enter Credentials'
-    imgtk = ImageTk.PhotoImage(file='label image.jpg')
-    lmain = ttk.Label(picFrame, image=imgtk)
-    lmain.grid()
-
+    
+    imagetk = ImageTk.PhotoImage(file='label image.jpg')
+    lmain.imagetk = imagetk
+    lmain.configure(image=imagetk)
+    
 # ---------------------------------------Exit function--------------------------------
 
 def exitit():
@@ -300,7 +296,7 @@ def summary():
             if sheet.cell(row = i , column = req_column).value == 'P':
                 name = sheet.cell(row = i , column = 1).value
                 present_list.append(name)
-        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-2)+' students are present' , font = ('Times New Roman',12)).place(x = 0 , y = 30)
+        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-1)+' students are present' , font = ('Times New Roman',12)).place(x = 0 , y = 30)
         prograssbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/5)*100)).place(x = 350 , y = 50)
         for x in range(0,len(present_list)):
             lmain_x = Label(window , text = str(x+1)+'. '+present_list[x]).place(x = 0 , y = (60 + x*5))
