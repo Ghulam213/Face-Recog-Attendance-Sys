@@ -24,7 +24,7 @@ from ttkthemes import ThemedTk
 # pickle_out.close()
 
 
-# ======================================Defining Main Window=====================================================
+#======================================Defining Main Window=====================================================
 
 root = ThemedTk(theme='radiance')
 root.title('Attendance System')
@@ -96,8 +96,8 @@ timerFrame.after(1, Run)
 # ---------------------------------------------- in top frame-------------------------------------------------
 
 titleName = ttk.Label(titleFrame, text='ATTENDANCE THROUGH FACIAL RECOGNITION',
-                      font=('Times New Roman', 20, 'bold'))
-titleName.place(x=95, y=20)
+                      font=('Tw Cen MT', 20))
+titleName.place(x=180, y=20)
 
 # ----------------------------------------- in middle frame---------------------------------------------------
 
@@ -177,11 +177,6 @@ def main():
     global student_name
     # global name_for_encoding
     student_name = name_display.get()
-    '''name_list = student_name.split(' ')
-    name_for_encoding = ''
-    for x in name_list:
-        name_for_encoding += x
-    name_for_encoding = name_for_encoding.lower()'''
     statusbar['text'] = 'Checking Name...'
 
     # taking the index of the particular person entering name
@@ -213,7 +208,7 @@ def main():
     # cv2.imwrite(img_name, frame)
     # print("{} written!".format(img_name))
     encoding_unknown_image = face_recognition.face_encodings(frame)[0]
-    print('the cam:' ,encoding_unknown_image)
+    #print('the cam:' ,encoding_unknown_image)
 
     cam.release()
     cv2.destroyAllWindows()
@@ -224,24 +219,10 @@ def main():
 
     #-------------------------if more than one faces shows the number of faces-----------------------------------------#
 
-    if len(encoding_unknown_image) > 0:
-        def strength(encoding_unknown_image):
-            print(f'{len(encoding_unknown_image)} students present in class.')
+    # if len(encoding_unknown_image) > 0:
+    #     def strength(encoding_unknown_image):
+    #         print(f'{len(encoding_unknown_image)} students present in class.')
 
-    #-------------------------Twilio mobile messages-------------------------------------------------------------------#
-
-    acc_sid = os.environ.get('ACC_SID')
-    auth_token = os.environ.get('AUTH_TOKEN')
-    my_number = os.environ.get('MY_PHONE_NUMBER')
-
-    client = Client(acc_sid, auth_token)
-
-    def message(my_number):
-        client.messages.create(
-            to=my_number,
-            from_=+18597554541,
-            body='\nPlease report to the class or you will not be marked present.'
-        )
 
 #-----------------------------------------------------------------------------------#
 
@@ -252,18 +233,34 @@ def main():
 
     # comparing the results
     statusbar['text'] = 'Validating Data...'
-    results = face_recognition.compare_faces([image_encoding], encoding_unknown_image, )
+    results = face_recognition.compare_faces([image_encoding], encoding_unknown_image)
     # print(results)
 
     # now checking both and showing results
 
-    if results == True:
+    if True in results and student_name in pickled_encodings[0]:
         messagebox.showinfo('Face recognitions result', 'Your attendance have been marked successfully!!')
         statusbar['text'] = 'showing results'
-        #mark()
+        mark()
+        reset()
     else:
         messagebox.showinfo('Face recognitions result', 'Your Credentials do not match. Try again!!')
-        reset()        
+        reset()
+
+
+    #-------------------------Twilio mobile messages-------------------------------------------------------------------#
+
+acc_sid = os.environ.get('ACC_SID')
+auth_token = os.environ.get('AUTH_TOKEN')
+
+client = Client(acc_sid, auth_token)
+
+def message():
+    client.messages.create(
+        to=os.environ.get('MY_PHONE_NUMBER'),
+        from_=+18597554541,
+        body='\nPlease report to the class or you will not be marked present.'
+    )
 
 
 # ---------------------------------------reset function--------------------------------
@@ -297,13 +294,13 @@ def summary():
         window.title('Summary')
         window.geometry('400x400')
         present_list = []
-    
-        title_name2 = Label(window , text = 'Attendence Summary' , font = ('Times New Roman',20,'bold')).place(x = 50 , y = 0)
+
+        title_name2 = Label(window , text = 'Attendence Summary' , font = ('Calibri',20,'bold')).place(x = 50 , y = 0)
         for i in range(2,sheet.max_row):
             if sheet.cell(row = i , column = req_column).value == 'P':
                 name = sheet.cell(row = i , column = 1).value
                 present_list.append(name)
-        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row)+' students are present' , font = ('Times New Roman',12)).place(x = 0 , y = 30)
+        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-2)+' students are present' , font = ('Times New Roman',12)).place(x = 0 , y = 30)
         prograssbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/5)*100)).place(x = 350 , y = 50)
         for x in range(0,len(present_list)):
             lmain_x = Label(window , text = str(x+1)+'. '+present_list[x]).place(x = 0 , y = (60 + x*5))
@@ -316,19 +313,22 @@ def summary():
 
 
 # making buttons
-markBtn = ttk.Button(bottomFrame, text='Mark Attendence', command=lambda: main())
+markBtn = ttk.Button(bottomFrame, text='Mark Attandence', command=lambda: main())
 markBtn.grid(row=0, column=1, padx=40, pady=20)
 
 resetBtn = ttk.Button(bottomFrame, text='Reset', command=lambda: reset())
 resetBtn.grid(row=0, column=3, padx=30, pady=20)
 
 exitBtn = ttk.Button(bottomFrame, text='EXIT', command=exitit)
-exitBtn.grid(row=0, column=5, padx=40, pady=20)
+exitBtn.grid(row=1, column=5, padx=40, pady=20)
 
-openBtn = ttk.Button(bottomFrame, text='Check Attendence', command=openAttendence)
+openBtn = ttk.Button(bottomFrame, text='Check Attendance', command=openAttendence)
 openBtn.grid(row=1, column=1, padx=40, pady=20)
 
 sumBtn = ttk.Button(bottomFrame, text='Summary', command=summary)
 sumBtn.grid(row=1, column=3, padx=40, pady=20)
+
+msgBtn = ttk.Button(bottomFrame, text='Message', command=message)
+msgBtn.grid(row=0, column=5, padx=40, pady=20)
 
 root.mainloop()
