@@ -231,7 +231,7 @@ def entryPage():
         markBtn.destroy()
         resetBtn.destroy()
         openBtn.destroy()
-        #msgBtn.destroy()
+        msgBtn.destroy()
         sumBtn.destroy()
         logoutBtn.destroy()
     else:
@@ -485,6 +485,5 @@ def summary():
 # ----------------------------------DEFINING BUTTONS AFTER THEIR FUNCTIONS---------------------------------------
 fristPage()
 
-# making buttons
 
 root.mainloop()
