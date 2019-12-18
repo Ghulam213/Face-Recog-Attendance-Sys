@@ -74,13 +74,13 @@ def Run():
     w.delete('all')
     # Add new text
     w.create_text(
-        [100, 25], anchor=CENTER, text="%s:%s:%s" % (h, m, s), font=("Tw Cen MT", 25)
+        [100, 25], anchor=CENTER, text="%s:%s:%ss" % (h, m, s), font=("Tw Cen MT", 20)
     )
 
     # s+=1
 
     if m == 0 and s == 0:
-        markBtn = Button(bottomFrame, text='Mark Attendence', state=DISABLED)
+        markBtn = Button(bottomFrame, text='Mark Attendance', state=DISABLED)
         markBtn.grid(row=0, column=1, padx=40, pady=20)
         return
     elif s == 0:
@@ -136,7 +136,7 @@ statusbar.config(width='1280')
 run = False
 def mark():
     global run
-    statusbar['text'] = 'Marking Attendence....'
+    statusbar['text'] = 'Marking Attendance....'
     course = courseVar.get()
     name = student_name
 
@@ -198,7 +198,7 @@ def main():
     while int(time.time() - start) != 5:
         global frame
         ret, frame = cam.read()
-        cv2.imshow("test", frame)
+        cv2.imshow("Face Recognizer", frame)
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         img = Image.fromarray(cv2image)
         if not ret:
@@ -247,6 +247,7 @@ def main():
 
 #-------------------------Twilio mobile messages-------------------------------------------------------------------#
 
+acc_sid = os.environ.get('ACC_SID')
 auth_token = os.environ.get('AUTH_TOKEN')
 client = Client(acc_sid, auth_token)
 
@@ -291,26 +292,30 @@ def summary():
         window.geometry('400x400')
         present_list = []
 
-        title_name2 = Label(window , text = 'Attendence Summary' , font = ('Tw Cen MT',20,'bold')).place(x = 50 , y = 0)
+        title_name2 = Label(window , text = 'Attendance Summary' , font = ('Tw Cen MT',20)).place(x = 75 , y = 0)
+
         for i in range(2,sheet.max_row):
             if sheet.cell(row = i , column = req_column).value == 'P':
                 name = sheet.cell(row = i , column = 1).value
                 present_list.append(name)
-        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-1)+' students are present' , font = ('Tw Cen MT',12)).place(x = 0 , y = 30)
-        prograssbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/(sheet.max_row-1))*100)).place(x = 340 , y = 50)
-        percent_label = Label(window , text =str(len(present_list)/(sheet.max_row-1)*100)+ '% \n Attendance' ).place(x = 290 , y = 180)
+
+        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-1)+' students are present' , font = ('Tw Cen MT',12)).place(x = 0 , y = 50)
+        progressbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/(sheet.max_row-1))*100)).place(x = 340 , y = 50)
+        percent = round(len(present_list)/(sheet.max_row-1)*100, 2)
+        percent_label = Label(window , text ='{}%\npresence'.format(percent) ).place(x = 320, y = 180)
+
         for x in range(0,len(present_list)):
-            lmain_x = Label(window , text = str(x+1)+'. '+present_list[x]).place(x = 0 , y = (60 + x*25))
+            lmain_x = Label(window , text = str(x+1)+'. '+present_list[x]).place(x=0, y=(80 + x*25))
         window.mainloop()
     else:
-        messagebox.showinfo('ERROR:','NO INFORMATION TO SHOW!!')
+        messagebox.showinfo('Error','There\'s nothing to show yet!')
 
 
 # ----------------------------------DEFINING BUTTONS AFTER THEIR FUNCTIONS---------------------------------------
 
 
 # making buttons
-markBtn = ttk.Button(bottomFrame, text='Mark Attandence', command=lambda: main())
+markBtn = ttk.Button(bottomFrame, text='Mark Attendance', command=lambda: main())
 markBtn.grid(row=0, column=1, padx=40, pady=20)
 
 resetBtn = ttk.Button(bottomFrame, text='Reset', command=lambda: reset())
