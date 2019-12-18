@@ -33,9 +33,11 @@ root.iconbitmap('icon.ico')
 root.geometry('1000x600')
 
 logined = False
+fristPage_image = ImageTk.PhotoImage(file = 'attendence.png')
 imagetk = ImageTk.PhotoImage(file = 'recognition.png')
 login_page_image = ImageTk.PhotoImage(file = 'manager.png')
 # defining frames
+
 
 def mainPage():
     root.geometry('1320x620')
@@ -155,6 +157,7 @@ def login():
     titleName1.destroy()
     titleName2.destroy()
     exitBtn.destroy()
+    lmain3.destroy()
     global username
     username = ttk.Label(root, text='Username',
                           font=('Tw Cen MT', 18, 'bold'))
@@ -207,13 +210,18 @@ def fristPage():
                       font=('Tw Cen MT', 25))
     titleName2.place(x=350, y=120)
 
+    global lmain3
+    lmain3 = Label(root , image = fristPage_image)
+    lmain3.place(x = 300 , y = 170)
+
+
     global enterBtn
     enterBtn = ttk.Button(root , text = 'Login', command = login)
-    enterBtn.place(x = 420 , y = 450)
+    enterBtn.place(x = 420 , y = 480)
 
     global exitBtn
     exitBtn = ttk.Button(root, text='EXIT', command=root.destroy)
-    exitBtn.place(x = 420 , y = 510)
+    exitBtn.place(x = 420 , y = 530)
 
 
 def entryPage():
@@ -246,7 +254,7 @@ def entryPage():
     global titleName1
     titleName1 = ttk.Label(root, text='FACIAL RECOGNITION',
                       font=('Tw Cen MT', 40))
-    titleName1.place(x=320, y=40)
+    titleName1.place(x=280, y=40)
 
     global titleName2
     titleName2 = ttk.Label(root, text='ATTENDANCE SYSTEM',
@@ -255,8 +263,13 @@ def entryPage():
 
     global enterBtn
     enterBtn = ttk.Button(root , text = 'Login', command = login)
-    enterBtn.place(x = 420 , y = 450)
+    enterBtn.place(x = 420 , y = 480)
 
+    global lmain3
+    lmain3 = Label(root , image = fristPage_image)
+    lmain3.place(x = 300 , y = 170)
+
+    global exitBtn
     exitBtn = ttk.Button(root, text='EXIT', command=root.destroy)
     exitBtn.place(x = 420 , y = 530)
 
