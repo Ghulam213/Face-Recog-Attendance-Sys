@@ -10,7 +10,7 @@ from PIL import ImageTk, Image
 from tkinter import ttk
 from tkinter import messagebox
 import datetime
-from twilio.rest import Client
+#from twilio.rest import Client
 import openpyxl
 from ttkthemes import ThemedTk
 
@@ -27,6 +27,7 @@ from ttkthemes import ThemedTk
 #======================================Defining Main Window=====================================================
 
 root = ThemedTk(theme='radiance')
+root.resizable(0,0)
 root.title('Attendance System')
 root.iconbitmap('icon.ico')
 root.geometry('1320x620')
@@ -74,13 +75,13 @@ def Run():
     w.delete('all')
     # Add new text
     w.create_text(
-        [100, 25], anchor=CENTER, text="%s:%s:%ss" % (h, m, s), font=("Tw Cen MT", 20)
+        [100, 25], anchor=CENTER, text="%s:%s:%s" % (h, m, s), font=("Tw Cen MT", 20)
     )
 
     # s+=1
 
     if m == 0 and s == 0:
-        markBtn = Button(bottomFrame, text='Mark Attendance', state=DISABLED)
+        markBtn = ttk.Button(bottomFrame, text='Mark Attendance', state=DISABLED)
         markBtn.grid(row=0, column=1, padx=40, pady=20)
         return
     elif s == 0:
@@ -192,7 +193,7 @@ def main():
 
     statusbar['text'] = 'Taking Live Image...'
     cam = cv2.VideoCapture(0)
-    cv2.namedWindow("test")
+    #cv2.namedWindow("test")
     start = time.time()
 
     while int(time.time() - start) != 5:
@@ -247,16 +248,16 @@ def main():
 
 #-------------------------Twilio mobile messages-------------------------------------------------------------------#
 
-acc_sid = os.environ.get('ACC_SID')
-auth_token = os.environ.get('AUTH_TOKEN')
-client = Client(acc_sid, auth_token)
+# acc_sid = os.environ.get('ACC_SID')
+# auth_token = os.environ.get('AUTH_TOKEN')
+# client = Client(acc_sid, auth_token)
 
-def message():
-    client.messages.create(
-        to=os.environ.get('MY_PHONE_NUMBER'),
-        from_=+18597554541,
-        body='\nPlease report to the class or you will not be marked present.'
-    )
+# def message():
+#     client.messages.create(
+#         to=os.environ.get('MY_PHONE_NUMBER'),
+#         from_=+18597554541,
+#         body='\nPlease report to the class or you will not be marked present.'
+#     )
 
 
 # ---------------------------------------reset function--------------------------------
@@ -287,25 +288,29 @@ def openAttendence():
 
 def summary():
     if run:
-        window = Tk()
-        window.title('Summary')
+        window = ThemedTk(theme='arc')
+        window.resizable(0,0)
         window.geometry('400x400')
         present_list = []
 
-        title_name2 = Label(window , text = 'Attendance Summary' , font = ('Tw Cen MT',20)).place(x = 75 , y = 0)
+        title_name2 =ttk.Label(window , text = 'Attendance Summary' , font = ('Tw Cen MT',20) , style = "BW.TLabel").place(x = 75 , y = 0)
 
         for i in range(2,sheet.max_row):
             if sheet.cell(row = i , column = req_column).value == 'P':
                 name = sheet.cell(row = i , column = 1).value
                 present_list.append(name)
 
-        info = Label(window , text = str(len(present_list))+'/'+str(sheet.max_row-1)+' students are present' , font = ('Tw Cen MT',12)).place(x = 0 , y = 50)
-        progressbar = ttk.Progressbar(window , orient = VERTICAL , value = ((len(present_list)/(sheet.max_row-1))*100)).place(x = 340 , y = 50)
+        info = ttk.Label(window, text = str(len(present_list))+'/'+str(sheet.max_row-1)+' students are present' , font = ('Tw Cen MT',12)).place(x = 0 , y = 50)
+        progressbar = ttk.Progressbar(window , orient = VERTICAL,length = 220, value = (len(present_list)/(sheet.max_row-1))*100 ).place(x = 340 , y = 50)
         percent = round(len(present_list)/(sheet.max_row-1)*100, 2)
-        percent_label = Label(window , text ='{}%\npresence'.format(percent) ).place(x = 320, y = 180)
+        percent_label = ttk.Label(window, text ='{}%\npresence'.format(percent) ).place(x = 340, y = 290)
 
         for x in range(0,len(present_list)):
-            lmain_x = Label(window , text = str(x+1)+'. '+present_list[x]).place(x=0, y=(80 + x*25))
+            lmain_x = ttk.Label(window, text = str(x+1)+'. '+present_list[x], font = ('Tw Cen MT',12)).place(x=0, y=(80 + x*25))
+
+        backBtn = ttk.Button(window, text='Return', command=window.destroy).place(x = 280 , y = 350)
+
+
         window.mainloop()
     else:
         messagebox.showinfo('Error','There\'s nothing to show yet!')
@@ -330,7 +335,7 @@ openBtn.grid(row=1, column=1, padx=40, pady=20)
 sumBtn = ttk.Button(bottomFrame, text='Summary', command=summary)
 sumBtn.grid(row=1, column=3, padx=40, pady=20)
 
-msgBtn = ttk.Button(bottomFrame, text='Message', command=message)
-msgBtn.grid(row=0, column=5, padx=40, pady=20)
+# msgBtn = ttk.Button(bottomFrame, text='Message', command=message)
+# msgBtn.grid(row=0, column=5, padx=40, pady=20)
 
 root.mainloop()
