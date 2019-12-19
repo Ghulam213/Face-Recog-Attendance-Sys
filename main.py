@@ -21,7 +21,7 @@ from ttkthemes import ThemedTk
 # pickle_out.close()
 
 
-# ======================================Defining Main Window=====================================================
+#======================================Defining Main Window=====================================================
 
 root = ThemedTk(theme='radiance')
 root.resizable(0, 0)
@@ -358,7 +358,7 @@ def main():
     # global name_for_encoding
     course = courseVar.get()
     if course == 'Choose Course':
-        messagebox.showinfo('ERROR', 'Please Choose a Course!')
+        messagebox.showinfo('ERROR', 'Course to choose karo yaar')
         return
     student_name = name_display.get()
     statusbar['text'] = 'Checking Name...'
@@ -368,7 +368,7 @@ def main():
     if student_name in pickled_encodings[0]:
         index_of_name_encodings = pickled_encodings[0].index(student_name)
     else:
-        messagebox.showinfo('Name Error:', 'Name not found. Please check your name.')
+        messagebox.showinfo('Error', 'I don\'nt even know who you are!')
         return
 
     statusbar['text'] = 'Taking Live Image...'
@@ -403,7 +403,7 @@ def main():
 
     # -----------------------------------------------------------------------------------#
 
-    # taking out the particular image and find its encoding and comaring
+    # taking out the particular image and find its encoding and comparing
 
     image_encoding = pickled_encodings[1][index_of_name_encodings]
 
@@ -416,11 +416,17 @@ def main():
 
     if True in results and student_name in pickled_encodings[0]:
         mark()
-        messagebox.showinfo('Face recognitions result', 'Your attendance have been marked successfully!!')
+        messagebox.showinfo('Face Recognizer', 'Attendance lag gayi hai aapki {} chill karo!'.format(student_name.split(' ')[0]))
         statusbar['text'] = 'showing results'
         reset()
     else:
-        messagebox.showinfo('Face recognitions result', 'Your Credentials do not match. Try again!!')
+        # for encoding in pickled_encodings[1]:
+        #     result = face_recognition.compare_faces([encoding], encoding_unknown_image)
+        #     if result:
+        #         index = pickled_encodings[1].index(encoding)
+        #         name = pickled_encodings[0][index]
+        #         break
+        messagebox.showinfo('Face Recognizer', 'You\'re not {}, are you? Proxy lagane nahi doonga!'.format(student_name))
         reset()
 
 
@@ -498,7 +504,7 @@ def summary():
 
         window.mainloop()
     else:
-        messagebox.showinfo('Error', 'There\'s nothing to show yet!')
+        messagebox.showinfo('Error', 'There\'s nothing to show here yet!')
 
 
 # ----------------------------------DEFINING BUTTONS AFTER THEIR FUNCTIONS---------------------------------------
