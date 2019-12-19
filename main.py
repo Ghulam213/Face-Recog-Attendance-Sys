@@ -1,4 +1,3 @@
-
 import os
 import cv2
 import face_recognition
@@ -14,9 +13,7 @@ from twilio.rest import Client
 import openpyxl
 from ttkthemes import ThemedTk
 
-
-
-#----------------------------------------making pkl file of encodings-------------------------------------------
+# ----------------------------------------making pkl file of encodings-------------------------------------------
 # encodings = face_recognition.face_recognition_cli.scan_known_people('images')
 #
 # pickle_out = open('encodings.pkl', 'wb')
@@ -24,18 +21,20 @@ from ttkthemes import ThemedTk
 # pickle_out.close()
 
 
-#======================================Defining Main Window=====================================================
+# ======================================Defining Main Window=====================================================
 
 root = ThemedTk(theme='radiance')
-root.resizable(0,0)
+root.resizable(0, 0)
 root.title('Attendance System')
 root.iconbitmap('icon.ico')
 root.geometry('1000x600')
 
-logined = False
-fristPage_image = ImageTk.PhotoImage(file = 'attendence.png')
-imagetk = ImageTk.PhotoImage(file = 'recognition.png')
-login_page_image = ImageTk.PhotoImage(file = 'manager.png')
+Login = False
+FrontPage_image = ImageTk.PhotoImage(file='attendence.png')
+imagetk = ImageTk.PhotoImage(file='recognition.png')
+login_page_image = ImageTk.PhotoImage(file='manager.png')
+
+
 # defining frames
 
 
@@ -43,12 +42,12 @@ def mainPage():
     root.geometry('1320x620')
     lmain2.destroy()
     wrong.destroy()
-    username.destroy() 
+    username.destroy()
     username_display.destroy()
     password.destroy()
     password_display.destroy()
     loginBtn.destroy()
-    cancelBtn.destroy() 
+    cancelBtn.destroy()
 
     titleFrame = Frame(root, width='900', height='100')
     titleFrame.pack(side=TOP)
@@ -61,7 +60,7 @@ def mainPage():
 
     global lmain
     # imagetk = ImageTk.PhotoImage(file = 'label image.jpg')
-    lmain = ttk.Label(picFrame, image = imagetk)
+    lmain = ttk.Label(picFrame, image=imagetk)
     lmain.grid()
 
     global bottomFrame
@@ -78,7 +77,7 @@ def mainPage():
 
     global titleName
     titleName = ttk.Label(titleFrame, text='ATTENDANCE THROUGH FACIAL RECOGNITION',
-                      font=('Tw Cen MT', 20))
+                          font=('Tw Cen MT', 20))
     titleName.place(x=180, y=20)
 
     # ----------------------------------------- in middle frame---------------------------------------------------
@@ -150,6 +149,7 @@ def mainPage():
     msgBtn = ttk.Button(bottomFrame, text='Message', command=message)
     msgBtn.grid(row=0, column=5, padx=40, pady=20)
 
+
 def login():
     root.geometry('1000x600')
     enterBtn.destroy()
@@ -160,73 +160,73 @@ def login():
     lmain3.destroy()
     global username
     username = ttk.Label(root, text='Username',
-                          font=('Tw Cen MT', 18, 'bold'))
+                         font=('Tw Cen MT', 18, 'bold'))
     username.place(x=430, y=210)
     global username_display
     username_display = ttk.Entry(root, width=45, font=('Tw Cen MT', 11))
     username_display.place(x=310, y=250)
     global password
     password = ttk.Label(root, text='Password',
-                          font=('Tw Cen MT', 20, 'bold'))
+                         font=('Tw Cen MT', 20, 'bold'))
     password.place(x=430, y=290)
     global password_display
-    password_display = ttk.Entry(root, show = '*' ,width=45, font=('Tw Cen MT', 11))
+    password_display = ttk.Entry(root, show='*', width=45, font=('Tw Cen MT', 11))
     password_display.place(x=310, y=340)
 
     global lmain2
-    lmain2 = Label(root , image = login_page_image)
-    lmain2.place(x = 430 , y = 50)
+    lmain2 = Label(root, image=login_page_image)
+    lmain2.place(x=430, y=50)
 
     global wrong
-    wrong = Label(root , text = '' , fg = 'red' , font=('Tw Cen MT', 11))
-    wrong.place(x = 330 , y = 440)
+    wrong = Label(root, text='', fg='red', font=('Tw Cen MT', 11))
+    wrong.place(x=330, y=440)
 
     def loginCheck():
         user = username_display.get()
         login_password = password_display.get()
-        if user.lower() == 'admin' and login_password.lower() == '12345678':
-            global logined
-            logined = True
+        if user.lower() == 'admin' and login_password.lower() == 'admin':
+            global Login
+            Login = True
             mainPage()
         else:
-            wrong['text'] = 'Check Your Username or Password and Try again!!'
-    
-    global loginBtn
-    loginBtn = ttk.Button(root , text = 'Login', command = loginCheck)
-    loginBtn.place(x = 420 , y = 480)
-    
-    global cancelBtn
-    cancelBtn = ttk.Button(root , text = 'Cancel', command = entryPage)
-    cancelBtn.place(x = 420 , y = 530)
+            wrong['text'] = 'Credentials entered are not registered. Please try again!'
 
-def fristPage():
+    global loginBtn
+    loginBtn = ttk.Button(root, text='Login', command=loginCheck)
+    loginBtn.place(x=420, y=480)
+
+    global cancelBtn
+    cancelBtn = ttk.Button(root, text='Cancel', command=entryPage)
+    cancelBtn.place(x=420, y=530)
+
+
+def FrontPage():
     global titleName1
     titleName1 = ttk.Label(root, text='FACIAL RECOGNITION',
-                      font=('Tw Cen MT', 40))
+                           font=('Tw Cen MT', 40))
     titleName1.place(x=280, y=60)
 
     global titleName2
     titleName2 = ttk.Label(root, text='ATTENDANCE SYSTEM',
-                      font=('Tw Cen MT', 25))
+                           font=('Tw Cen MT', 25))
     titleName2.place(x=350, y=120)
 
     global lmain3
-    lmain3 = Label(root , image = fristPage_image)
-    lmain3.place(x = 300 , y = 170)
-
+    lmain3 = Label(root, image=FrontPage_image)
+    lmain3.place(x=300, y=170)
 
     global enterBtn
-    enterBtn = ttk.Button(root , text = 'Login', command = login)
-    enterBtn.place(x = 420 , y = 480)
+    enterBtn = ttk.Button(root, text='Login', command=login)
+    enterBtn.place(x=420, y=480)
 
     global exitBtn
     exitBtn = ttk.Button(root, text='EXIT', command=root.destroy)
-    exitBtn.place(x = 420 , y = 530)
+    exitBtn.place(x=420, y=530)
 
 
 def entryPage():
     root.geometry('1000x600')
-    if logined == True or run == True:
+    if Login == True or run == True:
         titleName.destroy()
         w.destroy()
         lmain.destroy()
@@ -244,53 +244,55 @@ def entryPage():
         logoutBtn.destroy()
     else:
         lmain2.destroy()
-        username.destroy() 
+        username.destroy()
         username_display.destroy()
         password.destroy()
         password_display.destroy()
         loginBtn.destroy()
-        cancelBtn.destroy()       
+        cancelBtn.destroy()
 
     global titleName1
     titleName1 = ttk.Label(root, text='FACIAL RECOGNITION',
-                      font=('Tw Cen MT', 40))
+                           font=('Tw Cen MT', 40))
     titleName1.place(x=280, y=40)
 
     global titleName2
     titleName2 = ttk.Label(root, text='ATTENDANCE SYSTEM',
-                      font=('Tw Cen MT', 25))
+                           font=('Tw Cen MT', 25))
     titleName2.place(x=350, y=100)
 
     global enterBtn
-    enterBtn = ttk.Button(root , text = 'Login', command = login)
-    enterBtn.place(x = 420 , y = 480)
+    enterBtn = ttk.Button(root, text='Login', command=login)
+    enterBtn.place(x=420, y=480)
 
     global lmain3
-    lmain3 = Label(root , image = fristPage_image)
-    lmain3.place(x = 300 , y = 170)
+    lmain3 = Label(root, image=FrontPage_image)
+    lmain3.place(x=300, y=170)
 
     global exitBtn
     exitBtn = ttk.Button(root, text='EXIT', command=root.destroy)
-    exitBtn.place(x = 420 , y = 530)
-
-
-
+    exitBtn.place(x=420, y=530)
 
 
 s = 59
-m = 14
+m = 9
 h = 0
 
 
 def Run():
-    global s, m, h , w
+    global s, m, h, w
 
     # Delete old text
     w.delete('all')
     # Add new text
-    w.create_text(
-        [100, 25], anchor=CENTER, text="%s:%s:%s" % (h, m, s), font=("Tw Cen MT", 20)
-    )
+    if s<10:
+        w.create_text(
+            [100, 25], anchor=CENTER, text="0%s:0%s:0%ss" % (h, m, s), font=("Tw Cen MT", 20)
+        )
+    else:
+        w.create_text(
+            [100, 25], anchor=CENTER, text="0%s:0%s:%ss" % (h, m, s), font=("Tw Cen MT", 20)
+        )
 
     # s+=1
 
@@ -306,14 +308,13 @@ def Run():
     timerFrame.after(1000, Run)
 
 
-
-
 # ---------------------------------------------- in top frame-------------------------------------------------
-
 
 
 # ----------------------------------------defining the main face recognition function-------------------------------
 run = False
+
+
 def mark():
     global run
     statusbar['text'] = 'Marking Attendance....'
@@ -326,7 +327,7 @@ def mark():
     wb = openpyxl.load_workbook('Attendence.xlsx')
     sheet = wb.get_sheet_by_name(course)  # in original program sheet1 will be replaced by
     # varible course already in gui framework.py
-    
+
     for i in range(1, sheet.max_row + 1):
         if sheet.cell(row=i, column=1).value == name:
             req_row = i
@@ -357,7 +358,7 @@ def main():
     # global name_for_encoding
     course = courseVar.get()
     if course == 'Choose Course':
-        messagebox.showinfo('ERROR:','Please Choose a Course!!')
+        messagebox.showinfo('ERROR', 'Please Choose a Course!')
         return
     student_name = name_display.get()
     statusbar['text'] = 'Checking Name...'
@@ -372,7 +373,7 @@ def main():
 
     statusbar['text'] = 'Taking Live Image...'
     cam = cv2.VideoCapture(0)
-    #cv2.namedWindow("test")
+    # cv2.namedWindow("test")
     start = time.time()
 
     while int(time.time() - start) != 5:
@@ -385,7 +386,7 @@ def main():
             break
         k = cv2.waitKey(1)
     encoding_unknown_image = face_recognition.face_encodings(frame)[0]
-    #print('the cam:' ,encoding_unknown_image)
+    # print('the cam:' ,encoding_unknown_image)
 
     cam.release()
     cv2.destroyAllWindows()
@@ -394,15 +395,13 @@ def main():
     lmain.imgtk = imgtk
     lmain.configure(image=imgtk)
 
-#-------------------------if more than one faces shows the number of faces-----------------------------------------#
+    # -------------------------if more than one faces shows the number of faces-----------------------------------------#
 
     # if len(encoding_unknown_image) > 0:
     #     def strength(encoding_unknown_image):
     #         print(f'{len(encoding_unknown_image)} students present in class.')
 
-
-#-----------------------------------------------------------------------------------#
-
+    # -----------------------------------------------------------------------------------#
 
     # taking out the particular image and find its encoding and comaring
 
@@ -411,7 +410,7 @@ def main():
     # comparing the results
     statusbar['text'] = 'Validating Data...'
     results = face_recognition.compare_faces([image_encoding], encoding_unknown_image)
-    #print(results)
+    # print(results)
 
     # now checking both and showing results
 
@@ -425,11 +424,12 @@ def main():
         reset()
 
 
-#-------------------------Twilio mobile messages-------------------------------------------------------------------#
+# -------------------------Twilio mobile messages-------------------------------------------------------------------#
 
 acc_sid = os.environ.get('ACC_SID')
 auth_token = os.environ.get('AUTH_TOKEN')
 client = Client(acc_sid, auth_token)
+
 
 def message():
     client.messages.create(
@@ -445,58 +445,63 @@ def reset():
     courseVar.set('Choose Course')
     student_name = ''
     statusbar['text'] = 'Enter Credentials'
-    
-    imagetk = ImageTk.PhotoImage(file='label image.jpg')
+
+    imagetk = ImageTk.PhotoImage(file='recognition.png')
     lmain.imagetk = imagetk
     lmain.configure(image=imagetk)
-    
+
+
 # ---------------------------------------Exit function--------------------------------
 
 def exitit():
     if run:
-        for i in range(2,sheet.max_row):
-            if sheet.cell(row = i , column = req_column).value == 'P':
+        for i in range(2, sheet.max_row):
+            if sheet.cell(row=i, column=req_column).value == 'P':
                 continue
             else:
-                sheet.cell(row = i , column = req_column).value = 'A'
+                sheet.cell(row=i, column=req_column).value = 'A'
         wb.save('Attendence.xlsx')
     entryPage()
+
 
 def openAttendence():
     os.startfile('Attendence.xlsx')
 
+
 def summary():
     if run:
         window = ThemedTk(theme='arc')
-        window.resizable(0,0)
+        window.resizable(0, 0)
         window.geometry('400x400')
         present_list = []
 
-        title_name2 =ttk.Label(window , text = 'Attendance Summary' , font = ('Tw Cen MT',20) , style = "BW.TLabel").place(x = 75 , y = 0)
+        title_name2 = ttk.Label(window, text='Attendance Summary', font=('Tw Cen MT', 20), style="BW.TLabel").place(
+            x=75, y=0)
 
-        for i in range(2,sheet.max_row):
-            if sheet.cell(row = i , column = req_column).value == 'P':
-                name = sheet.cell(row = i , column = 1).value
+        for i in range(2, sheet.max_row):
+            if sheet.cell(row=i, column=req_column).value == 'P':
+                name = sheet.cell(row=i, column=1).value
                 present_list.append(name)
 
-        info = ttk.Label(window, text = str(len(present_list))+'/'+str(sheet.max_row-1)+' students are present' , font = ('Tw Cen MT',12)).place(x = 0 , y = 50)
-        progressbar = ttk.Progressbar(window , orient = VERTICAL,length = 220, value = (len(present_list)/(sheet.max_row-1))*100 ).place(x = 340 , y = 50)
-        percent = round(len(present_list)/(sheet.max_row-1)*100, 2)
-        percent_label = ttk.Label(window, text ='{}%\npresence'.format(percent) ).place(x = 340, y = 290)
+        info = ttk.Label(window, text=str(len(present_list)) + '/' + str(sheet.max_row - 1) + ' students are present',
+                         font=('Tw Cen MT', 12)).place(x=0, y=50)
+        progressbar = ttk.Progressbar(window, orient=VERTICAL, length=220,
+                                      value=(len(present_list) / (sheet.max_row - 1)) * 100).place(x=340, y=50)
+        percent = round(len(present_list) / (sheet.max_row - 1) * 100, 2)
+        percent_label = ttk.Label(window, text='{}%\npresence'.format(percent)).place(x=340, y=290)
 
-        for x in range(0,len(present_list)):
-            lmain_x = ttk.Label(window, text = str(x+1)+'. '+present_list[x], font = ('Tw Cen MT',12)).place(x=0, y=(80 + x*25))
+        for x in range(0, len(present_list)):
+            lmain_x = ttk.Label(window, text=str(x + 1) + '. ' + present_list[x], font=('Tw Cen MT', 12)).place(x=0, y=(
+                        80 + x * 25))
 
-        backBtn = ttk.Button(window, text='Return', command=window.destroy).place(x = 280 , y = 350)
-
+        backBtn = ttk.Button(window, text='Return', command=window.destroy).place(x=280, y=350)
 
         window.mainloop()
     else:
-        messagebox.showinfo('Error','There\'s nothing to show yet!')
+        messagebox.showinfo('Error', 'There\'s nothing to show yet!')
 
 
 # ----------------------------------DEFINING BUTTONS AFTER THEIR FUNCTIONS---------------------------------------
-fristPage()
-
+FrontPage()
 
 root.mainloop()
