@@ -358,7 +358,7 @@ def main():
     # global name_for_encoding
     course = courseVar.get()
     if course == 'Choose Course':
-        messagebox.showinfo('ERROR', 'Course to choose karo yaar')
+        messagebox.showinfo('ERROR', 'Course to choose karo yaar!')
         return
     student_name = name_display.get()
     statusbar['text'] = 'Checking Name...'
@@ -416,17 +416,17 @@ def main():
 
     if True in results and student_name in pickled_encodings[0]:
         mark()
-        messagebox.showinfo('Face Recognizer', 'Attendance lag gayi hai aapki {} chill karo!'.format(student_name.split(' ')[0]))
+        messagebox.showinfo('Face Recognizer', '{}, Attendance mark hogayi hai!'.format(student_name.split(' ')[0]))
         statusbar['text'] = 'showing results'
         reset()
     else:
         # for encoding in pickled_encodings[1]:
         #     result = face_recognition.compare_faces([encoding], encoding_unknown_image)
-        #     if result:
+        #     if result in pickled_encodings.any(result):
         #         index = pickled_encodings[1].index(encoding)
         #         name = pickled_encodings[0][index]
         #         break
-        messagebox.showinfo('Face Recognizer', 'You\'re not {}, are you? Proxy lagane nahi doonga!'.format(student_name))
+        messagebox.showinfo('Face Recognizer', 'You\'re not {}, are you? Proxies nahi lagane doonga!'.format(student_name))
         reset()
 
 
